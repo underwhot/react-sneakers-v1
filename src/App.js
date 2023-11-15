@@ -1,31 +1,52 @@
-import Card from './components/Card';
-import Cart from './components/Cart';
-import Header from './components/Header';
+import { useEffect, useState } from 'react';
+import Header from './components/Header/Header';
+import Cart from './components/Cart/Cart';
+import Cards from './components/Cards/Cards';
 
 function App() {
+  const [dataSneakers, setDataSneakers] = useState([]);
+  const [isCartOpen, setIsCartOpen] = useState(false);
+  const [cartItems, setCartItems] = useState([]);
+
+  useEffect(() => {
+    fetch('https://654fb2ee358230d8f0cda05a.mockapi.io/sneakers')
+      .then((res) => res.json())
+      .then((json) => {
+        setDataSneakers(json);
+      })
+      .catch((err) => console.error(err));
+  }, []);
+
+  const isCartOpenHandler = () => {
+    setIsCartOpen(!isCartOpen);
+  };
+
+  const onAddtoCart = (id) => {
+    const currItem = dataSneakers.find((item) => item.id === id);
+
+    if (!cartItems.includes(currItem)) {
+      setCartItems((prev) => [...prev, currItem]);
+    } else {
+      setCartItems((prev) => [...prev.filter((item) => item !== currItem)]);
+    }
+  };
+
+  const onRemoveFromCart = (id) => {
+    const currItem = dataSneakers.find((item) => item.id === id);
+    setCartItems((prev) => [...prev.filter((item) => item !== currItem)]);
+  };
+
   return (
     <div className="wrapper">
-      <Cart></Cart>
-      <Header></Header>
-
-      <main className="main sneakers">
-        <div className="sneakers__container">
-          <div className="sneakers__top">
-            <h1 className="sneakers__title title">Все кроссовки</h1>
-            <input
-              type="text"
-              className="sneakers__search"
-              placeholder="Поиск..."
-            />
-          </div>
-          <div className="sneakers__cards">
-            <Card></Card>
-            <Card></Card>
-            <Card></Card>
-            <Card></Card>
-            <Card></Card>
-          </div>
-        </div>
+      <Cart
+        isCartOpen={isCartOpen}
+        onCloseCart={isCartOpenHandler}
+        cartItems={cartItems}
+        onRemoveFromCart={onRemoveFromCart}
+      ></Cart>
+      <Header onOpenCart={isCartOpenHandler}></Header>
+      <main className="main">
+        <Cards onAddtoCart={onAddtoCart} dataSneakers={dataSneakers}></Cards>
       </main>
     </div>
   );
