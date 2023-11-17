@@ -14,12 +14,17 @@
     position: absolute;
     top: 20px;
     left: 20px;
-  }
 
-  &__heart-like {
-    display: none;
-  }
-  &__heart-unlike {
+    @media (any-hover: hover) {
+      img {
+        transition: transform 0.3s ease 0s;
+      }
+      &:hover {
+        img {
+          transform: scale(1.2);
+        }
+      }
+    }
   }
 
   &__img {
@@ -59,12 +64,15 @@
   }
 
   &__add {
-  }
-
-  &__plus {
-  }
-
-  &__check {
-    display: none;
+    @media (any-hover: hover) {
+      img {
+        transition: transform 0.3s ease 0s;
+      }
+      &:hover {
+        img {
+          transform: scale(1.2);
+        }
+      }
+    }
   }
 }

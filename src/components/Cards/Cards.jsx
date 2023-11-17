@@ -2,7 +2,14 @@ import React, { useState } from 'react';
 import Card from '../Card/Card';
 import './Cards.scss';
 
-const Cards = ({ dataSneakers, onAddToCart }) => {
+const Cards = ({
+  dataSneakers,
+  onAddToCart,
+  cartItems,
+  title,
+  onAddToFavourits,
+  favItems
+}) => {
   const [searchValue, setSearchValue] = useState('');
 
   const onChangeSearchInput = (value) => {
@@ -10,10 +17,9 @@ const Cards = ({ dataSneakers, onAddToCart }) => {
   };
 
   return (
-    <div className="sneakers">
       <div className="sneakers__container">
         <div className="sneakers__top">
-          <h1 className="sneakers__title title">Все кроссовки</h1>
+          <h1 className="sneakers__title title">{title}</h1>
           <input
             onChange={(e) => onChangeSearchInput(e.target.value)}
             value={searchValue}
@@ -34,11 +40,13 @@ const Cards = ({ dataSneakers, onAddToCart }) => {
                 {...sneakers}
                 key={sneakers.id}
                 onAddToCart={onAddToCart}
+                cartItems={cartItems}
+                onAddToFavourits={onAddToFavourits}
+                favItems={favItems}
               ></Card>
             ))}
         </div>
       </div>
-    </div>
   );
 };
 

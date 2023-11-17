@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom';
 import React from 'react';
 import './Header.scss';
 
@@ -5,7 +6,7 @@ const Header = ({ onOpenCart }) => {
   return (
     <header className="header">
       <div className="header__container">
-        <a href="/" className="header__logo logo-header">
+        <Link to="/" className="header__logo logo-header">
           <img
             className="logo-header__img"
             src="/img/logo.png"
@@ -17,7 +18,7 @@ const Header = ({ onOpenCart }) => {
               Магазин лучших кроссовок
             </div>
           </div>
-        </a>
+        </Link>
         <ul className="header__list">
           <li className="header__item">
             <button onClick={onOpenCart} type="button" className="header__link">
@@ -26,10 +27,10 @@ const Header = ({ onOpenCart }) => {
             </button>
           </li>
           <li className="header__item">
-            <button type="button" className="header__link">
+            <Link to="favourites" className="header__link">
               <img src="/img/header/heart.svg" alt="heart" />
-              <span>Закладки</span>
-            </button>
+              <span>Избранное</span>
+            </Link>
           </li>
           <li className="header__item">
             <button type="button" className="header__link">

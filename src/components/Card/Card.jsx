@@ -1,26 +1,45 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import './Card.scss';
 
-const Card = ({ title, price, imgUrl, id, onAddToCart }) => {
+const Card = ({
+  title,
+  price,
+  imgUrl,
+  id,
+  onAddToCart,
+  cartItems,
+  onAddToFavourits,
+  favItems,
+}) => {
   const [isAdded, setIsAdded] = useState(false);
+  const [isLiked, setIsLiked] = useState(false);
+
+  useEffect(() => {
+    if (cartItems.some((item) => item.id === id)) {
+      setIsAdded(true);
+    }
+    if (favItems.some((item) => item.id === id)) {
+      setIsLiked(true);
+    }
+  }, []);
 
   const onClickPlus = () => {
     onAddToCart(id);
-    setIsAdded(!isAdded)
-  }
+    setIsAdded(!isAdded);
+  };
+
+  const onClickLike = () => {
+    onAddToFavourits(id);
+    setIsLiked(!isLiked);
+  };
 
   return (
     <div className="sneakers__card sneakers-card">
       <div type="button" className="sneakers-card__body">
-        <button className="sneakers-card__favourite">
+        <button onClick={onClickLike} className="sneakers-card__favourite">
           <img
             className="sneakers-card__heart-like"
-            src="/img/card/heart-like.svg"
-            alt="heart"
-          />
-          <img
-            className="sneakers-card__heart-unlike"
-            src="/img/card/heart-unlike.svg"
+            src={`/img/card/${isLiked ? 'like' : 'unlike'}.svg`}
             alt="heart"
           />
         </button>
