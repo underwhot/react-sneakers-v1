@@ -2,6 +2,14 @@ import React from 'react';
 import './Cart.scss';
 
 const Cart = ({ isCartOpen, onCloseCart, cartItems, onRemoveFromCart }) => {
+  let total;
+  let tax;
+
+  if (cartItems && cartItems.length > 0) {
+    total = cartItems.reduce((acc, item) => (acc += +item.price), 0);
+    tax = Math.round(total * 0.05);
+  }
+
   return (
     <div className={isCartOpen ? 'cart active' : 'cart'}>
       <div onClick={onCloseCart} className="cart__overlay"></div>
@@ -30,12 +38,16 @@ const Cart = ({ isCartOpen, onCloseCart, cartItems, onRemoveFromCart }) => {
           <div className="bottom-cart__row">
             <div className="bottom-cart__text">Итого:</div>
             <span className="bottom-cart__span"></span>
-            <div className="bottom-cart__total">21 498 руб.</div>
+            <div className="bottom-cart__total">
+              {cartItems.length === 0 ? 0 : total} руб.
+            </div>
           </div>
           <div className="bottom-cart__row">
             <div className="bottom-cart__text">Налог 5%: </div>
             <span className="bottom-cart__span"></span>
-            <div className="bottom-cart__total">1074 руб. </div>
+            <div className="bottom-cart__total">
+              {cartItems.length === 0 ? 0 : tax} руб.{' '}
+            </div>
           </div>
           <button
             type="button"

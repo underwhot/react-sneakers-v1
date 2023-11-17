@@ -1,6 +1,7 @@
 import Cards from '../Cards/Cards';
 
 const Home = ({
+  isLoading,
   onAddToCart,
   dataSneakers,
   cartItems,
@@ -10,6 +11,7 @@ const Home = ({
   return (
     <main className="main sneakers">
       <Cards
+      isLoading={isLoading}
         title="Все кроссовки"
         onAddToCart={onAddToCart}
         dataSneakers={dataSneakers}

@@ -11,6 +11,7 @@ function App() {
   const [isCartOpen, setIsCartOpen] = useState(false);
   const [cartItems, setCartItems] = useState([]);
   const [favItems, setFavItems] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     // fetch('https://654fb2ee358230d8f0cda05a.mockapi.io/sneakersCart')
@@ -20,20 +21,45 @@ function App() {
     //   })
     //   .catch((err) => console.error(err));
 
-    axios
-      .get('https://654fb2ee358230d8f0cda05a.mockapi.io/sneakersData')
-      .then((res) => {
-        setDataSneakers(res.data);
-      })
-      .catch((err) => console.error(err));
+    // axios
+    //   .get('https://654fb2ee358230d8f0cda05a.mockapi.io/sneakersCart')
+    //   .then((res) => {
+    //     setCartItems(res.data);
+    //   })
+    //   .catch((err) => console.error(err));
 
-    axios
-      .get('https://654fb2ee358230d8f0cda05a.mockapi.io/sneakersCart')
-      .then((res) => {
-        setCartItems(res.data);
-      })
-      .catch((err) => console.error(err));
+    const loadingTimer = setTimeout(() => {
+      axios
+        .get('https://654fb2ee358230d8f0cda05a.mockapi.io/sneakersData')
+        .then((res) => {
+          setDataSneakers(res.data);
+          setIsLoading(false);
+        })
+        .catch((err) => console.error(err));
+    }, 2000);
+
+    const cartItemsFromLS = localStorage.getItem('cartItems');
+    if (cartItemsFromLS && cartItemsFromLS.length > 0) {
+      setCartItems(JSON.parse(cartItemsFromLS));
+    }
+
+    const favItemsFromLS = localStorage.getItem('favItems');
+    if (favItemsFromLS && favItemsFromLS.length > 0) {
+      setFavItems(JSON.parse(favItemsFromLS));
+    }
+
+    return () => {
+      clearTimeout(loadingTimer);
+    };
   }, []);
+
+  useEffect(() => {
+    localStorage.setItem('cartItems', JSON.stringify(cartItems));
+  }, [cartItems]);
+
+  useEffect(() => {
+    localStorage.setItem('favItems', JSON.stringify(favItems));
+  }, [favItems]);
 
   const isCartOpenHandler = () => {
     setIsCartOpen(!isCartOpen);
@@ -41,26 +67,33 @@ function App() {
 
   const onAddToCart = (id) => {
     if (!cartItems.find((item) => item.id === id)) {
-      let sneakers = dataSneakers.find((item) => item.id === id);
-      axios.post(
-        'https://654fb2ee358230d8f0cda05a.mockapi.io/sneakersCart',
-        sneakers
-      );
+      const sneakers = dataSneakers.find((item) => item.id === id);
       setCartItems((prev) => [...prev, sneakers]);
     } else {
-      axios
-        .delete(
-          `https://654fb2ee358230d8f0cda05a.mockapi.io/sneakersCart/${id}`
-        )
-        .catch((err) => console.error(err));
       setCartItems((prev) => prev.filter((item) => item.id !== id));
     }
+
+    // if (!cartItems.find((item) => item.id === id)) {
+    //   let sneakers = dataSneakers.find((item) => item.id === id);
+    //   axios.post(
+    //     'https://654fb2ee358230d8f0cda05a.mockapi.io/sneakersCart',
+    //     sneakers
+    //   );
+    //   setCartItems((prev) => [...prev, sneakers]);
+    // } else {
+    //   axios
+    //     .delete(
+    //       `https://654fb2ee358230d8f0cda05a.mockapi.io/sneakersCart/${id}`
+    //     )
+    //     .catch((err) => console.error(err));
+    //   setCartItems((prev) => prev.filter((item) => item.id !== id));
+    // }
   };
 
   const onRemoveFromCart = (id) => {
-    axios
-      .delete(`https://654fb2ee358230d8f0cda05a.mockapi.io/sneakersCart/${id}`)
-      .catch((err) => console.error(err));
+    // axios
+    //   .delete(`https://654fb2ee358230d8f0cda05a.mockapi.io/sneakersCart/${id}`)
+    //   .catch((err) => console.error(err));
 
     setCartItems((prev) => prev.filter((item) => item.id !== id));
   };
@@ -89,6 +122,7 @@ function App() {
             path="/"
             element={
               <Home
+                isLoading={isLoading}
                 onAddToCart={onAddToCart}
                 onAddToFavourits={onAddToFavourits}
                 dataSneakers={dataSneakers}

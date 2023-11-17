@@ -34,7 +34,7 @@ const Card = ({
   };
 
   return (
-    <div className="sneakers__card sneakers-card">
+    <div className="sneakers__card">
       <div type="button" className="sneakers-card__body">
         <button onClick={onClickLike} className="sneakers-card__favourite">
           <img
