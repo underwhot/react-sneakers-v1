@@ -35,7 +35,7 @@ const Header = ({ onOpenCart }) => {
           <li className="header__item">
             <button type="button" className="header__link">
               <img src="/img/header/user.svg" alt="user" />
-              <span>Профиль</span>
+              <span>Мои заказы</span>
             </button>
           </li>
         </ul>

@@ -2,15 +2,17 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 import Header from './components/Header/Header';
-import Cart from './components/Cart/Cart';
 import Home from './components/pages/Home';
 import Favourites from './components/pages/Favourites';
+import Cart from './components/Cart/Cart';
+import AppContext from './context';
 
 function App() {
   const [dataSneakers, setDataSneakers] = useState([]);
   const [isCartOpen, setIsCartOpen] = useState(false);
   const [cartItems, setCartItems] = useState([]);
   const [favItems, setFavItems] = useState([]);
+  const [orderedItems, setOrderedItems] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
@@ -36,7 +38,7 @@ function App() {
           setIsLoading(false);
         })
         .catch((err) => console.error(err));
-    }, 2000);
+    }, 1000);
 
     const cartItemsFromLS = localStorage.getItem('cartItems');
     if (cartItemsFromLS && cartItemsFromLS.length > 0) {
@@ -46,6 +48,11 @@ function App() {
     const favItemsFromLS = localStorage.getItem('favItems');
     if (favItemsFromLS && favItemsFromLS.length > 0) {
       setFavItems(JSON.parse(favItemsFromLS));
+    }
+
+    const orderedItemsFromLS = localStorage.getItem('orderedItems');
+    if (orderedItemsFromLS && orderedItemsFromLS.length > 0) {
+      setOrderedItems(JSON.parse(orderedItemsFromLS));
     }
 
     return () => {
@@ -108,44 +115,48 @@ function App() {
   };
 
   return (
-    <BrowserRouter>
-      <div className="wrapper">
-        <Cart
-          isCartOpen={isCartOpen}
-          onCloseCart={isCartOpenHandler}
-          cartItems={cartItems}
-          onRemoveFromCart={onRemoveFromCart}
-        ></Cart>
-        <Header onOpenCart={isCartOpenHandler}></Header>
-        <Routes>
-          <Route
-            path="/"
-            element={
-              <Home
-                isLoading={isLoading}
-                onAddToCart={onAddToCart}
-                onAddToFavourits={onAddToFavourits}
-                dataSneakers={dataSneakers}
-                cartItems={cartItems}
-                favItems={favItems}
-              ></Home>
-            }
-          />
-          <Route
-            path="/favourites"
-            element={
-              <Favourites
-                onAddToCart={onAddToCart}
-                onAddToFavourits={onAddToFavourits}
-                dataSneakers={favItems}
-                cartItems={cartItems}
-                favItems={favItems}
-              ></Favourites>
-            }
-          />
-        </Routes>
-      </div>
-    </BrowserRouter>
+    <AppContext.Provider
+      value={{
+        dataSneakers,
+        isCartOpen,
+        cartItems,
+        favItems,
+        isLoading,
+        onAddToFavourits,
+        onAddToCart,
+        setCartItems,
+        orderedItems,
+        setOrderedItems,
+      }}
+    >
+      <BrowserRouter>
+        <div className="wrapper">
+          <Cart
+            isCartOpen={isCartOpen}
+            onCloseCart={isCartOpenHandler}
+            cartItems={cartItems}
+            onRemoveFromCart={onRemoveFromCart}
+          ></Cart>
+          <Header onOpenCart={isCartOpenHandler}></Header>
+          <Routes>
+            <Route
+              path="/"
+              element={
+                <Home
+                  isLoading={isLoading}
+                  onAddToCart={onAddToCart}
+                  onAddToFavourits={onAddToFavourits}
+                  dataSneakers={dataSneakers}
+                  cartItems={cartItems}
+                  favItems={favItems}
+                ></Home>
+              }
+            />
+            <Route path="/favourites" element={<Favourites></Favourites>} />
+          </Routes>
+        </div>
+      </BrowserRouter>
+    </AppContext.Provider>
   );
 }
 

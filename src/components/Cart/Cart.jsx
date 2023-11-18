@@ -1,14 +1,35 @@
-import React from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import './Cart.scss';
+import AppContext from '../../context';
 
 const Cart = ({ isCartOpen, onCloseCart, cartItems, onRemoveFromCart }) => {
+  const { setCartItems, orderedItems, setOrderedItems } =
+    useContext(AppContext);
+  const [isOrdered, setIsOrdered] = useState(false);
   let total;
   let tax;
 
   if (cartItems && cartItems.length > 0) {
-    total = cartItems.reduce((acc, item) => (acc += +item.price), 0);
-    tax = Math.round(total * 0.05);
+    const total = cartItems.reduce((acc, item) => (acc += +item.price), 0);
+    const tax = Math.round(total * 0.05);
   }
+
+  const orderHandler = () => {
+    localStorage.setItem('orderItems', JSON.stringify(cartItems));
+    setOrderedItems(cartItems);
+    setCartItems([]);
+    setIsOrdered(true);
+  };
+
+  useEffect(() => {
+    const resetCartOrdered = setTimeout(() => {
+      setIsOrdered(false);
+    }, 5000);
+
+    return () => {
+      clearTimeout(resetCartOrdered);
+    };
+  }, [orderedItems]);
 
   return (
     <div className={isCartOpen ? 'cart active' : 'cart'}>
@@ -20,42 +41,44 @@ const Cart = ({ isCartOpen, onCloseCart, cartItems, onRemoveFromCart }) => {
             <img src="/img/cart/close.svg" alt="close" />
           </button>
         </div>
-        <div className="cart__cards">
-          {cartItems.length === 0 ? (
-            <CartEmpty onCloseCart={onCloseCart}></CartEmpty>
-          ) : (
-            cartItems.map((item) => (
-              <CartItem
-                {...item}
-                key={item.id}
-                onRemoveFromCart={onRemoveFromCart}
-              ></CartItem>
-            ))
-          )}
-        </div>
-
-        <div className="cart__bottom bottom-cart">
-          <div className="bottom-cart__row">
-            <div className="bottom-cart__text">Итого:</div>
-            <span className="bottom-cart__span"></span>
-            <div className="bottom-cart__total">
-              {cartItems.length === 0 ? 0 : total} руб.
+        {cartItems.length === 0 ? (
+          <View isOrdered={isOrdered} onCloseCart={onCloseCart}></View>
+        ) : (
+          <>
+            <div className="cart__cards">
+              {cartItems.map((item) => (
+                <CartItem
+                  {...item}
+                  key={item.id}
+                  onRemoveFromCart={onRemoveFromCart}
+                ></CartItem>
+              ))}
             </div>
-          </div>
-          <div className="bottom-cart__row">
-            <div className="bottom-cart__text">Налог 5%: </div>
-            <span className="bottom-cart__span"></span>
-            <div className="bottom-cart__total">
-              {cartItems.length === 0 ? 0 : tax} руб.{' '}
+            <div className="cart__bottom bottom-cart">
+              <div className="bottom-cart__row">
+                <div className="bottom-cart__text">Итого:</div>
+                <span className="bottom-cart__span"></span>
+                <div className="bottom-cart__total">
+                  {cartItems.length === 0 ? 0 : total} руб.
+                </div>
+              </div>
+              <div className="bottom-cart__row">
+                <div className="bottom-cart__text">Налог 5%: </div>
+                <span className="bottom-cart__span"></span>
+                <div className="bottom-cart__total">
+                  {cartItems.length === 0 ? 0 : tax} руб.{' '}
+                </div>
+              </div>
+              <button
+                onClick={orderHandler}
+                type="button"
+                className="bottom-cart__order button-green arrow-right"
+              >
+                Оформить заказ
+              </button>
             </div>
-          </div>
-          <button
-            type="button"
-            className="bottom-cart__order button-green arrow-right"
-          >
-            Оформить заказ
-          </button>
-        </div>
+          </>
+        )}
       </div>
     </div>
   );
@@ -82,17 +105,21 @@ const CartItem = ({ title, price, imgUrl, id, onRemoveFromCart }) => {
   );
 };
 
-const CartEmpty = ({ onCloseCart }) => {
+const View = ({ isOrdered, onCloseCart }) => {
   return (
     <div className="cart__empty empty-cart">
       <img
-        src="/img/cart/empty.png"
+        src={`/img/cart/${isOrdered ? 'complite' : 'empty'}.png`}
         alt="empty box"
         className="empty-cart__img"
       />
-      <div className="empty-cart__title">Корзина пустая</div>
+      <div className="empty-cart__title">
+        {isOrdered ? 'Заказ оформлен!' : 'Корзина пустая'}
+      </div>
       <div className="empty-cart__text">
-        Добавьте хотя бы одну пару кроссовок, чтобы сделать заказ.
+        {isOrdered
+          ? 'Ваш заказ скоро будет передан курьерской доставке'
+          : 'Добавьте хотя бы одну пару кроссовок, чтобы сделать заказ.'}
       </div>
       <button
         onClick={onCloseCart}

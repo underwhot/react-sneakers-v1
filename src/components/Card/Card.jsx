@@ -17,11 +17,15 @@ const Card = ({
   useEffect(() => {
     if (cartItems.some((item) => item.id === id)) {
       setIsAdded(true);
+    } else {
+      setIsAdded(false);
     }
     if (favItems.some((item) => item.id === id)) {
       setIsLiked(true);
+    } else {
+      setIsLiked(false);
     }
-  }, []);
+  }, [cartItems, favItems]);
 
   const onClickPlus = () => {
     onAddToCart(id);

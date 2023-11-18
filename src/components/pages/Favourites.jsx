@@ -1,18 +1,23 @@
 import { Link } from 'react-router-dom';
 import Cards from '../Cards/Cards';
+import { useContext } from 'react';
+import AppContext from '../../context';
 
-const Home = ({ onAddToCart, dataSneakers, cartItems, onAddToFavourits, favItems }) => {
+const Favourites = () => {
+  const { onAddToCart, onAddToFavourits, dataSneakers, cartItems, favItems } =
+    useContext(AppContext);
+
   return (
     <main
       className={
-        dataSneakers.length === 0 ? 'main sneakers empty-fav' : 'main sneakers'
+        favItems.length === 0 ? 'main sneakers empty-fav' : 'main sneakers'
       }
     >
-      {dataSneakers.length > 0 ? (
+      {favItems.length > 0 ? (
         <Cards
           title="Избранное"
           onAddToCart={onAddToCart}
-          dataSneakers={dataSneakers}
+          dataSneakers={favItems}
           cartItems={cartItems}
           onAddToFavourits={onAddToFavourits}
           favItems={favItems}
@@ -41,4 +46,4 @@ const EmptyFav = () => {
   );
 };
 
-export default Home;
+export default Favourites;
