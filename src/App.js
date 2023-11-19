@@ -131,7 +131,7 @@ function App() {
         setCartItems,
       }}
     >
-      <BrowserRouter base="/react-sneakers">
+      <BrowserRouter>
         <div className="wrapper">
           <Cart
             isCartOpen={isCartOpen}
@@ -142,7 +142,7 @@ function App() {
           <Header onOpenCart={isCartOpenHandler} cartItems={cartItems}></Header>
           <Routes>
             <Route
-              path="/"
+              index
               element={
                 <Home
                   isLoading={isLoading}
@@ -154,8 +154,8 @@ function App() {
                 ></Home>
               }
             />
-            <Route path="/favourites" element={<Favourites></Favourites>} />
-            <Route path="/orders" element={<Orders></Orders>} />
+            <Route path="favourites" element={<Favourites></Favourites>} />
+            <Route path="orders" element={<Orders></Orders>} />
           </Routes>
         </div>
       </BrowserRouter>

@@ -8,7 +8,7 @@ const Header = ({ onOpenCart, cartItems }) => {
   return (
     <header className="header">
       <div className="header__container">
-        <Link to="/" className="header__logo logo-header">
+        <Link to="." className="header__logo logo-header">
           <img
             className="logo-header__img"
             src="img/logo.png"
@@ -31,12 +31,12 @@ const Header = ({ onOpenCart, cartItems }) => {
             </button>
           </li>
           <li className="header__item">
-            <Link to="/favourites" className="header__link">
+            <Link to="favourites" className="header__link">
               <img src="img/header/heart.svg" alt="heart" />
               <span>Избранное</span>
             </Link>
           </li>
-          <Link to="/orders" className="header__item">
+          <Link to="orders" className="header__item">
             <button type="button" className="header__link">
               <img src="img/header/user.svg" alt="user" />
               <span>Мой заказ</span>

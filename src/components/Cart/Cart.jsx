@@ -108,7 +108,7 @@ const View = ({ isOrdered, onCloseCart }) => {
           : 'Добавьте хотя бы одну пару кроссовок, чтобы сделать заказ.'}
       </div>
       {isOrdered ? (
-        <Link onClick={onCloseCart} to="/orders" className="empty-cart__back button-green">Перейти в мой заказ</Link>
+        <Link onClick={onCloseCart} to="orders" className="empty-cart__back button-green">Перейти в мой заказ</Link>
       ) : (
         <button
           onClick={onCloseCart}
