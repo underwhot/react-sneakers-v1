@@ -131,7 +131,7 @@ function App() {
         setCartItems,
       }}
     >
-      <BrowserRouter>
+      <BrowserRouter basename='/react-sneakers-v1/'>
         <div className="wrapper">
           <Cart
             isCartOpen={isCartOpen}
