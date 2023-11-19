@@ -44,7 +44,7 @@ const Card = ({
           <button onClick={onClickLike} className="sneakers-card__favourite">
             <img
               className="sneakers-card__heart-like"
-              src={`/img/card/${isLiked ? 'like' : 'unlike'}.svg`}
+              src={`img/card/${isLiked ? 'like' : 'unlike'}.svg`}
               alt="heart"
             />
           </button>
@@ -66,7 +66,7 @@ const Card = ({
             >
               <img
                 className="sneakers-card__plus"
-                src={`/img/card/${isAdded ? 'check' : 'plus'}.svg`}
+                src={`img/card/${isAdded ? 'check' : 'plus'}.svg`}
                 alt="plus"
               />
             </button>

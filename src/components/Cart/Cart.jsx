@@ -23,7 +23,7 @@ const Cart = ({ isCartOpen, onCloseCart, cartItems, onRemoveFromCart }) => {
         <div className="cart__top">
           <h2 className="cart__title">Корзина</h2>
           <button onClick={onCloseCart} type="button" className="cart__close">
-            <img src="/img/cart/close.svg" alt="close" />
+            <img src="img/cart/close.svg" alt="close" />
           </button>
         </div>
         {cartItems.length === 0 ? (
@@ -85,7 +85,7 @@ const CartItem = ({ title, price, imgUrl, id, onRemoveFromCart }) => {
         type="button"
         className="card-cart__delete"
       >
-        <img src="/img/cart/delete.svg" alt="delete" />
+        <img src="img/cart/delete.svg" alt="delete" />
       </button>
     </div>
   );
@@ -95,7 +95,7 @@ const View = ({ isOrdered, onCloseCart }) => {
   return (
     <div className="cart__empty empty-cart">
       <img
-        src={`/img/cart/${isOrdered ? 'complite' : 'empty'}.png`}
+        src={`img/cart/${isOrdered ? 'complite' : 'empty'}.png`}
         alt="empty box"
         className="empty-cart__img"
       />

@@ -1,6 +1,7 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import axios from 'axios';
+
 import Header from './components/Header/Header';
 import Home from './components/pages/Home';
 import Favourites from './components/pages/Favourites';
@@ -30,15 +31,23 @@ function App() {
     //   })
     //   .catch((err) => console.error(err));
 
-    const loadingTimer = setTimeout(() => {
-      axios
-        .get('https://654fb2ee358230d8f0cda05a.mockapi.io/sneakersData')
-        .then((res) => {
-          setDataSneakers(res.data);
-          setIsLoading(false);
-        })
-        .catch((err) => console.error(err));
-    }, 1000);
+    // const loadingTimer = setTimeout(() => {
+    //   axios
+    //     .get('https://654fb2ee358230d8f0cda05a.mockapi.io/sneakersData')
+    //     .then((res) => {
+    //       setDataSneakers(res.data);
+    //       setIsLoading(false);
+    //     })
+    //     .catch((err) => console.error(err));
+    // }, 1000);
+
+    axios
+      .get('https://654fb2ee358230d8f0cda05a.mockapi.io/sneakersData')
+      .then((res) => {
+        setDataSneakers(res.data);
+        setIsLoading(false);
+      })
+      .catch((err) => console.error(err));
 
     const cartItemsFromLS = localStorage.getItem('cartItems');
     if (cartItemsFromLS && cartItemsFromLS.length > 0) {
@@ -50,10 +59,9 @@ function App() {
       setFavItems(JSON.parse(favItemsFromLS));
     }
 
-
-    return () => {
-      clearTimeout(loadingTimer);
-    };
+    // return () => {
+    //   clearTimeout(loadingTimer);
+    // };
   }, []);
 
   useEffect(() => {
@@ -123,7 +131,7 @@ function App() {
         setCartItems,
       }}
     >
-      <BrowserRouter>
+      <BrowserRouter base="/react-sneakers">
         <div className="wrapper">
           <Cart
             isCartOpen={isCartOpen}
