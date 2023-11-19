@@ -4,6 +4,7 @@ import axios from 'axios';
 import Header from './components/Header/Header';
 import Home from './components/pages/Home';
 import Favourites from './components/pages/Favourites';
+import Orders from './components/pages/Orders';
 import Cart from './components/Cart/Cart';
 import AppContext from './context';
 
@@ -12,7 +13,6 @@ function App() {
   const [isCartOpen, setIsCartOpen] = useState(false);
   const [cartItems, setCartItems] = useState([]);
   const [favItems, setFavItems] = useState([]);
-  const [orderedItems, setOrderedItems] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
@@ -50,10 +50,6 @@ function App() {
       setFavItems(JSON.parse(favItemsFromLS));
     }
 
-    const orderedItemsFromLS = localStorage.getItem('orderedItems');
-    if (orderedItemsFromLS && orderedItemsFromLS.length > 0) {
-      setOrderedItems(JSON.parse(orderedItemsFromLS));
-    }
 
     return () => {
       clearTimeout(loadingTimer);
@@ -125,8 +121,6 @@ function App() {
         onAddToFavourits,
         onAddToCart,
         setCartItems,
-        orderedItems,
-        setOrderedItems,
       }}
     >
       <BrowserRouter>
@@ -137,7 +131,7 @@ function App() {
             cartItems={cartItems}
             onRemoveFromCart={onRemoveFromCart}
           ></Cart>
-          <Header onOpenCart={isCartOpenHandler}></Header>
+          <Header onOpenCart={isCartOpenHandler} cartItems={cartItems}></Header>
           <Routes>
             <Route
               path="/"
@@ -153,6 +147,7 @@ function App() {
               }
             />
             <Route path="/favourites" element={<Favourites></Favourites>} />
+            <Route path="/orders" element={<Orders></Orders>} />
           </Routes>
         </div>
       </BrowserRouter>

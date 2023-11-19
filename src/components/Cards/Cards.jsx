@@ -11,6 +11,7 @@ const Cards = ({
   title,
   onAddToFavourits,
   favItems,
+  clearOrders,
 }) => {
   const [searchValue, setSearchValue] = useState('');
 
@@ -18,17 +19,36 @@ const Cards = ({
     setSearchValue(value);
   };
 
+  let totalAmoutn;
+
+  if (clearOrders) {
+    totalAmoutn = dataSneakers.reduce((sum, item) => sum + item.price, 0);
+  }
+
   return (
     <div className="sneakers__container">
       <div className="sneakers__top">
-        <h1 className="sneakers__title title">{title}</h1>
-        <input
-          onChange={(e) => onChangeSearchInput(e.target.value)}
-          value={searchValue}
-          type="text"
-          className="sneakers__search"
-          placeholder="Поиск..."
-        />
+        <h1 className="sneakers__title title">
+          {title}{' '}
+          {clearOrders
+            ? `на сумму: ${new Intl.NumberFormat('ru-RU').format(
+                totalAmoutn
+              )} руб.`
+            : ''}
+        </h1>
+        {clearOrders ? (
+          <button className="button-green" onClick={clearOrders}>
+            Очистить заказ
+          </button>
+        ) : (
+          <input
+            onChange={(e) => onChangeSearchInput(e.target.value)}
+            value={searchValue}
+            type="text"
+            className="sneakers__search"
+            placeholder="Поиск..."
+          />
+        )}
       </div>
       <div className="sneakers__cards">
         {isLoading

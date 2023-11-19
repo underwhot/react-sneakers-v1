@@ -15,12 +15,12 @@ const Card = ({
   const [isLiked, setIsLiked] = useState(false);
 
   useEffect(() => {
-    if (cartItems.some((item) => item.id === id)) {
+    if (cartItems && cartItems.some((item) => item.id === id)) {
       setIsAdded(true);
     } else {
       setIsAdded(false);
     }
-    if (favItems.some((item) => item.id === id)) {
+    if (favItems && favItems.some((item) => item.id === id)) {
       setIsLiked(true);
     } else {
       setIsLiked(false);
@@ -40,13 +40,15 @@ const Card = ({
   return (
     <div className="sneakers__card">
       <div type="button" className="sneakers-card__body">
-        <button onClick={onClickLike} className="sneakers-card__favourite">
-          <img
-            className="sneakers-card__heart-like"
-            src={`/img/card/${isLiked ? 'like' : 'unlike'}.svg`}
-            alt="heart"
-          />
-        </button>
+        {onAddToFavourits && (
+          <button onClick={onClickLike} className="sneakers-card__favourite">
+            <img
+              className="sneakers-card__heart-like"
+              src={`/img/card/${isLiked ? 'like' : 'unlike'}.svg`}
+              alt="heart"
+            />
+          </button>
+        )}
         <div className="sneakers-card__img">
           <img src={imgUrl} alt="sneakers" />
         </div>
@@ -56,17 +58,19 @@ const Card = ({
             <div className="sneakers-card__text">Цена:</div>
             <div className="sneakers-card__value">{price} руб.</div>
           </div>
-          <button
-            onClick={onClickPlus}
-            type="button"
-            className="sneakers-card__add"
-          >
-            <img
-              className="sneakers-card__plus"
-              src={`/img/card/${isAdded ? 'check' : 'plus'}.svg`}
-              alt="plus"
-            />
-          </button>
+          {onAddToCart && (
+            <button
+              onClick={onClickPlus}
+              type="button"
+              className="sneakers-card__add"
+            >
+              <img
+                className="sneakers-card__plus"
+                src={`/img/card/${isAdded ? 'check' : 'plus'}.svg`}
+                alt="plus"
+              />
+            </button>
+          )}
         </div>
       </div>
     </div>

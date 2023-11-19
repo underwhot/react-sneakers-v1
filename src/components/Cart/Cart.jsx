@@ -1,35 +1,20 @@
 import React, { useContext, useEffect, useState } from 'react';
-import './Cart.scss';
 import AppContext from '../../context';
+import './Cart.scss';
+import { Link } from 'react-router-dom';
 
 const Cart = ({ isCartOpen, onCloseCart, cartItems, onRemoveFromCart }) => {
-  const { setCartItems, orderedItems, setOrderedItems } =
-    useContext(AppContext);
+  const { setCartItems } = useContext(AppContext);
   const [isOrdered, setIsOrdered] = useState(false);
-  let total;
-  let tax;
 
-  if (cartItems && cartItems.length > 0) {
-    const total = cartItems.reduce((acc, item) => (acc += +item.price), 0);
-    const tax = Math.round(total * 0.05);
-  }
+  const totalPrice = cartItems.reduce((acc, item) => acc + item.price, 0);
+  const taxPrice = Math.round(totalPrice * 0.05);
 
   const orderHandler = () => {
     localStorage.setItem('orderItems', JSON.stringify(cartItems));
-    setOrderedItems(cartItems);
     setCartItems([]);
     setIsOrdered(true);
   };
-
-  useEffect(() => {
-    const resetCartOrdered = setTimeout(() => {
-      setIsOrdered(false);
-    }, 5000);
-
-    return () => {
-      clearTimeout(resetCartOrdered);
-    };
-  }, [orderedItems]);
 
   return (
     <div className={isCartOpen ? 'cart active' : 'cart'}>
@@ -56,19 +41,20 @@ const Cart = ({ isCartOpen, onCloseCart, cartItems, onRemoveFromCart }) => {
             </div>
             <div className="cart__bottom bottom-cart">
               <div className="bottom-cart__row">
-                <div className="bottom-cart__text">Итого:</div>
-                <span className="bottom-cart__span"></span>
-                <div className="bottom-cart__total">
-                  {cartItems.length === 0 ? 0 : total} руб.
-                </div>
-              </div>
-              <div className="bottom-cart__row">
                 <div className="bottom-cart__text">Налог 5%: </div>
                 <span className="bottom-cart__span"></span>
                 <div className="bottom-cart__total">
-                  {cartItems.length === 0 ? 0 : tax} руб.{' '}
+                  {new Intl.NumberFormat('ru-RU').format(taxPrice)} руб.
                 </div>
               </div>
+              <div className="bottom-cart__row">
+                <div className="bottom-cart__text">Итого:</div>
+                <span className="bottom-cart__span"></span>
+                <div className="bottom-cart__total">
+                  {new Intl.NumberFormat('ru-RU').format(totalPrice)} руб.
+                </div>
+              </div>
+
               <button
                 onClick={orderHandler}
                 type="button"
@@ -121,13 +107,17 @@ const View = ({ isOrdered, onCloseCart }) => {
           ? 'Ваш заказ скоро будет передан курьерской доставке'
           : 'Добавьте хотя бы одну пару кроссовок, чтобы сделать заказ.'}
       </div>
-      <button
-        onClick={onCloseCart}
-        className="empty-cart__back button-green"
-        type="button"
-      >
-        Вернуться назад
-      </button>
+      {isOrdered ? (
+        <Link onClick={onCloseCart} to="/orders" className="empty-cart__back button-green">Перейти в мой заказ</Link>
+      ) : (
+        <button
+          onClick={onCloseCart}
+          className="empty-cart__back button-green"
+          type="button"
+        >
+          Закрыть корзину
+        </button>
+      )}
     </div>
   );
 };

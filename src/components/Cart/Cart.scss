@@ -1,6 +1,7 @@
 .cart {
   &.active {
     & .cart__overlay {
+      pointer-events: all;
       opacity: 1;
       visibility: visible;
     }
@@ -13,6 +14,7 @@
   }
 
   &__overlay {
+    pointer-events: none;
     visibility: hidden;
     opacity: 0;
     background: rgba(0, 0, 0, 0.2);

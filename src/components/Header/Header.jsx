@@ -2,7 +2,9 @@ import { Link } from 'react-router-dom';
 import React from 'react';
 import './Header.scss';
 
-const Header = ({ onOpenCart }) => {
+const Header = ({ onOpenCart, cartItems }) => {
+  const itemsAmount = cartItems.length;
+
   return (
     <header className="header">
       <div className="header__container">
@@ -23,7 +25,9 @@ const Header = ({ onOpenCart }) => {
           <li className="header__item">
             <button onClick={onOpenCart} type="button" className="header__link">
               <img src="/img/header/cart.svg" alt="cart" />
-              <span>1205 руб.</span>
+              <span>
+                {itemsAmount ? itemsAmount + ' шт.' : 'В корзине пусто'}
+              </span>
             </button>
           </li>
           <li className="header__item">
@@ -32,12 +36,12 @@ const Header = ({ onOpenCart }) => {
               <span>Избранное</span>
             </Link>
           </li>
-          <li className="header__item">
+          <Link to="orders" className="header__item">
             <button type="button" className="header__link">
               <img src="/img/header/user.svg" alt="user" />
-              <span>Мои заказы</span>
+              <span>Мой заказ</span>
             </button>
-          </li>
+          </Link>
         </ul>
       </div>
     </header>

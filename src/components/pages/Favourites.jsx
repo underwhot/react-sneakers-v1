@@ -23,13 +23,13 @@ const Favourites = () => {
           favItems={favItems}
         ></Cards>
       ) : (
-        <EmptyFav></EmptyFav>
+        <Empty></Empty>
       )}
     </main>
   );
 };
 
-const EmptyFav = () => {
+const Empty = () => {
   return (
     <div className="empty-fav__container">
       <div className="empty-fav__title">Пусто</div>
